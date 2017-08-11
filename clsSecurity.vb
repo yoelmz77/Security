@@ -6,8 +6,11 @@ Imports System.Security.Cryptography
 Imports System.Text
 
 Public Class clsSecurity
+    Public Sub New()
+
+    End Sub
     ' Methods
-    Private Function a(ByVal A_0 As String) As String
+    Private Shared Function a(ByVal A_0 As String) As String
         Dim str As String
         Try
             Dim bytes As Byte() = Encoding.UTF8.GetBytes(A_0)
@@ -22,11 +25,11 @@ Public Class clsSecurity
         Return str
     End Function
 
-    Public Function Decrypt(ByVal EncryptedString As String, ByVal Key As String) As String
+    Public Shared Function Decrypt(ByVal EncryptedString As String, ByVal Key As String) As String
         Dim message As String
         Try
             Dim buffer4 As Byte() = Convert.FromBase64String(EncryptedString)
-            Dim bytes As Byte() = Encoding.UTF8.GetBytes(Me.a(Key))
+            Dim bytes As Byte() = Encoding.UTF8.GetBytes(clsSecurity.a(Key))
             Dim rgbIV As Byte() = New Byte() {&H52, &H25, 9, &HEB, &H89, &H38, &H83, 220, 15, &HDF, &HAC, &H95, &H7C, &H86, &HF8, 7}
             Dim buffer As Byte() = New Byte(((buffer4.Length - 1) + 1) - 1) {}
             Dim managed As New RijndaelManaged
@@ -46,12 +49,12 @@ Public Class clsSecurity
         Return message
     End Function
 
-    Public Function Encrypt(ByVal StrText As String, ByVal Key As String) As String
+    Public Shared Function Encrypt(ByVal StrText As String, ByVal Key As String) As String
         Dim str As String
         Try
             Dim str3 As String = StrText.Replace(ChrW(0), "")
             Dim bytes As Byte() = Encoding.UTF8.GetBytes(StrText)
-            Dim rgbKey As Byte() = Encoding.UTF8.GetBytes(Me.a(Key))
+            Dim rgbKey As Byte() = Encoding.UTF8.GetBytes(clsSecurity.a(Key))
             Dim rgbIV As Byte() = New Byte() {&H52, &H25, 9, &HEB, &H89, &H38, &H83, 220, 15, &HDF, &HAC, &H95, &H7C, &H86, &HF8, 7}
             Dim managed As New RijndaelManaged
             Dim stream2 As New MemoryStream
